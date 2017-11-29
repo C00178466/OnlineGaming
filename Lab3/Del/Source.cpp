@@ -79,13 +79,10 @@ public:
 
 	//Moves the dot
 	void move();
-	void secondPlayermove(int x, int y);
+	void Enemymove(int x, int y);
 
 	//Shows the dot on the screen
 	void render();
-
-	bool collided;
-	bool collision();
 
 private:
 	//The X and Y offsets of the dot
@@ -318,7 +315,7 @@ void Dot::handleEvent(SDL_Event& e)
 	}
 }
 
-void Dot::secondPlayermove(int x, int y)
+void Dot::Enemymove(int x, int y)
 {
 	//Move the dot left or right
 
@@ -372,10 +369,6 @@ void Dot::render()
 	//Show the dot
 	gRedDotTexture.render(mPosX, mPosY);
 	gBlueDotTexture.render(mPos1X, mPos1Y);
-	if (collided == true)
-	{
-		caught.render(0, 0);
-	}
 }
 
 bool init()
@@ -449,19 +442,6 @@ bool loadMedia()
 		success = false;
 	}
 	return success;
-}
-bool Dot::collision()
-{
-	
-	if (mPosX <= mPos1X + gBlueDotTexture.getWidth() && mPosX >= mPos1X - gBlueDotTexture.getWidth() && mPosY <= mPos1Y + gBlueDotTexture.getHeight() && mPosY >= mPos1Y - gBlueDotTexture.getHeight())
-	{
-		collided = true;
-	}
-	else
-	{
-		collided = false;
-	}
-	return collided;
 }
 struct data {
 	TCPsocket socket;
@@ -568,7 +548,6 @@ int main(int argc, char* args[])
 
 					//Render objects
 					dot.render();
-					dot.collision();
 					//Update screen
 					SDL_RenderPresent(gRenderer);
 
@@ -610,7 +589,7 @@ int main(int argc, char* args[])
 								if (num == 3)
 								{
 									std::cout << "Message Type 1: " << socketvector[i].id << '\n';
-									dot.secondPlayermove(25,0);
+									dot.Enemymove(25,0);
 									for (int k = 0; k < socketvector.size(); k++)
 									{
 										if (k == i)
@@ -634,7 +613,7 @@ int main(int argc, char* args[])
 								}
 								else if (num == 2) {
 									std::cout << "Message Type 3: " << socketvector[i].id << '\n';
-									dot.secondPlayermove(0, 25);
+									dot.Enemymove(0, 25);
 									int tmpvar;
 									sscanf(tmp, "3 %d", &tmpvar);
 									for (int k = 0; k < socketvector.size(); k++)
@@ -649,7 +628,7 @@ int main(int argc, char* args[])
 
 								else if (num == 1) {
 									std::cout << "Message Type 3: " << socketvector[i].id << '\n';
-									dot.secondPlayermove(-25, 0);
+									dot.Enemymove(-25, 0);
 									int tmpvar;
 									sscanf(tmp, "3 %d", &tmpvar);
 									for (int k = 0; k < socketvector.size(); k++)
@@ -664,7 +643,7 @@ int main(int argc, char* args[])
 
 								else if (num == 5) {
 									std::cout << "Message Type 3: " << socketvector[i].id << '\n';
-									dot.secondPlayermove(0, -25);
+									dot.Enemymove(0, -25);
 									int tmpvar;
 									sscanf(tmp, "3 %d", &tmpvar);
 									for (int k = 0; k < socketvector.size(); k++)
